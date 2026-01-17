@@ -10,15 +10,58 @@ CHROMA_DIR = "data/index/chroma"
 COLLECTION_NAME = "routepilot_kb"
 
 
+def normalize(s):
+    s = s.lower()
+    s = re.sub(r"[^a-z0-9àâçéèêëîïôûùüÿñæœ\s\-]", " ", s)
+    s = re.sub(r"\s+", " ", s).strip()
+    return s
+
+
+def keyword_bonus(question, title, category, tags):
+    q = normalize(question)
+    t = normalize(title)
+    c = normalize(category or "")
+    g = normalize(tags or "")
+
+    bonus = 0
+
+    # Intention: export/pdf/csv
+    if ("export" in q) or ("pdf" in q) or ("csv" in q):
+        if ("export" in t) or ("pdf" in t) or ("csv" in t):
+            bonus += 6
+        if "workstation" in c or "mobile" in c:
+            bonus += 2
+        # pénalité si on tombe sur impression/étiquettes
+        if ("impression" in t) or ("étiquette" in t) or ("etiquette" in t):
+            bonus -= 3
+
+    # Intention: impression / étiquettes
+    if ("impression" in q) or ("étiquette" in q) or ("etiquette" in q):
+        if ("impression" in t) or ("étiquette" in t) or ("etiquette" in t):
+            bonus += 6
+
+    # Intention: MFA / SSO
+    if ("mfa" in q) or ("sso" in q):
+        if ("mfa" in t) or ("sso" in t):
+            bonus += 4
+
+    # Bonus overlap mots (très simple)
+    q_words = set(q.split())
+    t_words = set(t.split())
+    bonus += min(4, len(q_words.intersection(t_words)))
+
+    # Bonus tags
+    for w in ["pdf", "csv", "export", "mfa", "login", "vpn", "proxy"]:
+        if w in q and w in g:
+            bonus += 1
+
+    return bonus
+
+
 def extract_resolution_steps(text):
-    """
-    Essaie d'extraire la partie "Resolution steps" jusqu'à Verification/Escalation/References.
-    Si on ne trouve pas, on retourne un extrait utile.
-    """
     if not text:
         return ""
 
-    # Normaliser un peu
     t = text.replace("\r\n", "\n").replace("\r", "\n")
 
     m = re.search(
@@ -28,12 +71,38 @@ def extract_resolution_steps(text):
     )
     if m:
         steps = m.group(1).strip()
-        # Nettoyage simple
         steps = re.sub(r"\n{3,}", "\n\n", steps).strip()
         return steps
 
-    # fallback : retourner le début
     return t[:600].strip()
+
+
+def choose_best(question, docs, metas):
+    best_i = 0
+    best_score = -10**9
+
+    for i, (doc, meta) in enumerate(zip(docs, metas)):
+        title = meta.get("title", "")
+        category = meta.get("category", "")
+        tags = meta.get("tags", "")
+
+        score = keyword_bonus(question, title, category, tags)
+
+        # petit bonus si le chunk contient vraiment le mot clé
+        q = normalize(question)
+        d = normalize(doc)
+        if "export" in q and "export" in d:
+            score += 2
+        if "pdf" in q and "pdf" in d:
+            score += 2
+        if "mfa" in q and "mfa" in d:
+            score += 2
+
+        if score > best_score:
+            best_score = score
+            best_i = i
+
+    return best_i
 
 
 def main():
@@ -72,9 +141,10 @@ def main():
             print("\n Je ne trouve pas de réponse dans la KB.\n")
             continue
 
-        # On prend le meilleur match comme "page principale"
-        best_doc = docs[0]
-        best_meta = metas[0]
+        best_i = choose_best(question, docs, metas)
+
+        best_doc = docs[best_i]
+        best_meta = metas[best_i]
 
         kb_id = best_meta.get("kb_id", "")
         title = best_meta.get("title", "")
@@ -85,8 +155,7 @@ def main():
         print("\n==============================")
         print("Réponse recommandée (KB)")
         print("==============================")
-        if kb_id or title:
-            print(f"Page principale: {kb_id} | {title}")
+        print(f"Page principale: {kb_id} | {title}")
         if url:
             print(f"Source: {url}\n")
 
@@ -96,6 +165,8 @@ def main():
         print("\n------------------------------")
         print("Sources (Top 3)")
         print("------------------------------")
+
+        # on affiche toujours les 3 meilleurs "sémantiques", mais ça peut être différent de la page principale
         for i in range(min(3, len(metas))):
             m = metas[i]
             k = m.get("kb_id", "")

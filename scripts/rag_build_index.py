@@ -159,10 +159,11 @@ def main():
         metadatas = []
         documents = []
 
+        category = extract_category(text)
+        tags = extract_tags(text)
+
         for i, chunk in enumerate(chunks):
             chunk_id = f"{page_id}__chunk_{i}"
-            category = extract_category(text)
-            tags = extract_tags(text)
             ids.append(chunk_id)
             documents.append(chunk)
             metadatas.append({
@@ -175,9 +176,7 @@ def main():
                 "chunk_index": i,
             })
 
-        # Upsert simple: on supprime d'abord les chunks existants de cette page (si déjà indexée)
-        # (approche débutant, pas la plus optimale)
-        existing_ids = [f"{page_id}__chunk_{i}" for i in range(0, 5000)]
+
         # Supprime uniquement les chunks de cette page (propre, sans warnings)
         try:
             collection.delete(where={"page_id": page_id})
