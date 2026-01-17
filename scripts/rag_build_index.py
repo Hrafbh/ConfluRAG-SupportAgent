@@ -29,8 +29,8 @@ PAGES_JSON_PATH = "data/confluence/pages_full.json"
 CHROMA_DIR = "data/index/chroma"
 COLLECTION_NAME = "routepilot_kb"
 
-CHUNK_SIZE = 900      # caractères
-CHUNK_OVERLAP = 180   # caractères
+CHUNK_SIZE = 550
+CHUNK_OVERLAP = 120
 
 
 def html_to_text(html):
@@ -81,6 +81,15 @@ def build_full_url(base_url, webui):
         return webui
     return base_url.rstrip("/") + webui
 
+def extract_category(text):
+    m = re.search(r"Category:\s*([^\n]+)", text, re.IGNORECASE)
+    return m.group(1).strip() if m else ""
+
+def extract_tags(text):
+    m = re.search(r"Tags:\s*(\[[^\]]*\])", text, re.IGNORECASE)
+    return m.group(1).strip() if m else ""
+
+
 
 def main():
     load_dotenv()
@@ -126,6 +135,7 @@ def main():
 
         text = html_to_text(storage_html)
 
+
         # Si votre sync a mis un bloc meta HTML ("ID: KB-xxx"), on peut tenter de le détecter
         kb_id = ""
         m = re.search(r"\bKB-\d{3}\b", text)
@@ -151,6 +161,8 @@ def main():
 
         for i, chunk in enumerate(chunks):
             chunk_id = f"{page_id}__chunk_{i}"
+            category = extract_category(text)
+            tags = extract_tags(text)
             ids.append(chunk_id)
             documents.append(chunk)
             metadatas.append({
@@ -158,6 +170,8 @@ def main():
                 "kb_id": kb_id,
                 "title": title,
                 "url": url,
+                "category": category,
+                "tags": tags,
                 "chunk_index": i,
             })
 
