@@ -151,6 +151,7 @@ def create_page(cfg, title, html_value):
         "spaceId": str(cfg["space_id"]),
         "status": "current",
         "title": title,
+        "parentId": parent_id,
         "body": {
             "representation": "storage",
             "value": html_value
