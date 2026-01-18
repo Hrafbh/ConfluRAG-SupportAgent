@@ -1,0 +1,26 @@
+{
+  "SSO/MFA": {
+    "category": "SSO/MFA",
+    "keywords": ["mfa", "sso", "oidc", "saml", "auth", "2fa", "code", "otp", "connexion", "login"]
+  },
+  "Exports": {
+    "category": "Workstation & Mobile",
+    "keywords": ["export", "pdf", "csv", "report", "rapport", "télécharger", "download"]
+  },
+  "Network": {
+    "category": "Network & Connectivity",
+    "keywords": ["vpn", "proxy", "wifi", "réseau", "network", "timeout", "ip", "whitelist"]
+  },
+  "Mobile": {
+    "category": "Workstation & Mobile",
+    "keywords": ["mobile", "android", "ios", "sync", "gps", "caméra", "barcode", "code-barres"]
+  },
+  "Incidents": {
+    "category": "Incidents & Runbooks",
+    "keywords": ["incident", "outage", "panne", "indisponible", "runbook", "major", "p1", "p0", "degrad"]
+  },
+  "SupportProcess": {
+    "category": "Support Process",
+    "keywords": ["ticket", "triage", "priorité", "p1", "p2", "impact", "urgency", "escalade", "communication"]
+  }
+}
