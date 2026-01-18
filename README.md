@@ -86,3 +86,16 @@ Exemples :
 8) **UI + évaluation**  
    UI chat + sources citées, et un jeu de tests (questions answerable/unanswerable) pour mesurer retrieval, couverture citations et robustesse anti-hallucination.
 
+## RAG Evaluation
+
+We evaluate retrieval quality on a small, curated test set (`eval/eval_set.json`) using:
+- **Hit@K** (did we retrieve an expected KB page in the top K?)
+- **MRR** (how high the first correct result appears)
+
+📄 Full report: [`reports/rag_eval_report.md`](reports/rag_eval_report.md)  
+📊 Detailed results: [`reports/rag_eval_details.csv`](reports/rag_eval_details.csv)
+
+### How to reproduce
+```bash
+python scripts/rag_eval.py
+python scripts/rag_eval.py --use_routing

@@ -1,0 +1,9 @@
+test_id,query,expected,intent,intent_score,category_filter,top1,top3,top5,hit@1,hit@3,hit@5,mrr
+T01,Comment réinitialiser la MFA si j'ai perdu mon téléphone ?,KB-013,SSO/MFA,1,SSO/MFA,KB-013,KB-013|KB-012|KB-014,KB-013|KB-012|KB-014|KB-018|KB-020,1,1,1,1.0
+T02,Que faire si l’export PDF échoue ?,KB-024,Exports,2,Workstation & Mobile,KB-024,KB-024|KB-031|KB-032,KB-024|KB-031|KB-032|KB-029|KB-025,1,1,1,1.0
+T03,Je ne reçois pas le mail de reset mot de passe,KB-038,,0,,KB-007,KB-007|KB-014|KB-018,KB-007|KB-014|KB-018|KB-060|KB-038,0,0,1,0.2
+T04,Quels navigateurs sont supportés ?,KB-021,,0,,KB-021,KB-021|KB-032|KB-016,KB-021|KB-032|KB-016|KB-024|,1,1,1,1.0
+T05,"La plateforme est indisponible pour plusieurs utilisateurs, quoi faire ?",KB-053|KB-041,Incidents,1,Incidents & Runbooks,KB-053,KB-053|KB-060|KB-058,KB-053|KB-060|KB-058|KB-056|KB-055,1,1,1,1.0
+T06,Comment vider le cache et les cookies pour corriger l'UI ?,KB-022,,0,,KB-022,KB-022|KB-016|KB-021,KB-022|KB-016|KB-021|KB-060|KB-042,1,1,1,1.0
+T07,Activation MFA : comment faire ?,KB-012,SSO/MFA,1,SSO/MFA,KB-012,KB-012|KB-013|KB-014,KB-012|KB-013|KB-014|KB-020|KB-015,1,1,1,1.0
+T08,"Une page décrit les règles d'escalade, où la trouver ?",KB-048,SupportProcess,1,Support Process,,,,0,0,0,0.0

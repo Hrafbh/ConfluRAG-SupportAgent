@@ -1,0 +1,42 @@
+[
+  {
+    "id": "T01",
+    "query": "Comment réinitialiser la MFA si j'ai perdu mon téléphone ?",
+    "expected_kb_ids": ["KB-013"]
+  },
+  {
+    "id": "T02",
+    "query": "Que faire si l’export PDF échoue ?",
+    "expected_kb_ids": ["KB-024"]
+  },
+  {
+    "id": "T03",
+    "query": "Je ne reçois pas le mail de reset mot de passe",
+    "expected_kb_ids": ["KB-038"]
+  },
+  {
+    "id": "T04",
+    "query": "Quels navigateurs sont supportés ?",
+    "expected_kb_ids": ["KB-021"]
+  },
+  {
+    "id": "T05",
+    "query": "La plateforme est indisponible pour plusieurs utilisateurs, quoi faire ?",
+    "expected_kb_ids": ["KB-053", "KB-041"]
+  },
+  {
+    "id": "T06",
+    "query": "Comment vider le cache et les cookies pour corriger l'UI ?",
+    "expected_kb_ids": ["KB-022"]
+  },
+  {
+    "id": "T07",
+    "query": "Activation MFA : comment faire ?",
+    "expected_kb_ids": ["KB-012"]
+  },
+  {
+    "id": "T08",
+    "query": "Une page décrit les règles d'escalade, où la trouver ?",
+    "expected_kb_ids": ["KB-048"]
+  }
+]
