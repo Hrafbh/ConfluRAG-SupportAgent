@@ -129,10 +129,10 @@ def main():
     os.environ["ANONYMIZED_TELEMETRY"] = "False"
 
     if not os.path.exists(CHROMA_DIR):
-        print("❌ Index introuvable. Lancez d'abord: python scripts/rag_build_index.py")
+        print(" Index introuvable. Lancez d'abord: python scripts/rag_build_index.py")
         return
     if not os.path.exists(args.eval_set):
-        print(f"❌ Eval set introuvable: {args.eval_set}")
+        print(f" Eval set introuvable: {args.eval_set}")
         return
 
     tests = load_json(args.eval_set)
@@ -258,7 +258,7 @@ def main():
     with open(DEFAULT_REPORT_MD, "w", encoding="utf-8") as f:
         f.write("".join(lines))
 
-    print("\n✅ Evaluation terminée")
+    print("\n Evaluation terminée")
     print(f"Hit@1={acc1:.2%} | Hit@3={acc3:.2%} | Hit@5={acc5:.2%} | MRR={mrr_avg:.4f}")
     print(f"Report:  {DEFAULT_REPORT_MD}")
     print(f"Details: {DEFAULT_DETAILS_CSV}")
